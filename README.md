@@ -69,7 +69,7 @@ Create this file:
 nano var/ossec/integrations/wazuh_teams_notifier.py
 
 Add below code in the above location:
-
+```
 #!/usr/bin/env python3
 import sys
 import json
@@ -103,17 +103,20 @@ try:
     requests.post(webhook_url, json=payload)
 except Exception as e:
     print(f"Failed to send alert: {e}")
+```
 -----------
 
 And make it executable:
+```
 chmod +x wazuh_teams_notifier.py
-
+```
 then exit from the bash.
 
 Note: need to install nano in the bash before creating the file if you have already installed ignore this step.
 
 
 ###4. Define the command in /var/ossec/etc/ossec.conf inside <ossec_config>:
+```
 <integration>
   <name>custom</name>
   <hook_url>none</hook_url>
@@ -121,8 +124,9 @@ Note: need to install nano in the bash before creating the file if you have alre
   <alert_format>json</alert_format>
   <rules_id>100010</rules_id>
 </integration>
-
+```
 then edit Local_rules.xml and few rules in it 
+```
 <group name="teams-alerts">
   <rule id="100001" level="10">
     <decoded_as>json</decoded_as>
@@ -131,18 +135,21 @@ then edit Local_rules.xml and few rules in it
     <command>teams_notify</command>
   </rule>
 </group>
-
+```
 then restart the docker:
 docker restart single-node-wazuh.manager-1
 
 ###5. Test it:
 1.Create a test alert:
+```
 echo '{ "rule": { "level": 10, "description": "Test alert" }, "agent": { "name": "TestAgent" }, "full_log": "Suspicious login attempt detected." }' > /tmp/test_alert.json
 this will create a .json file.
+```
 
 2.Run the integration script:
+```
 cat /tmp/test_alert.json | docker exec -i <wazuh_manager_container_id_or_name> python3 /var/ossec/integrations/wazuh_teams_notifier.py
-
+```
 Now you should get a alert in your teams which is Analyzed by AI.
 
 🧠 What the AI Component Does
@@ -158,13 +165,6 @@ The script formats a message including:
 -Agent name
 -AI-generated summary (if enabled)
 -Sends it via an HTTP POST request to the Teams webhook.
-
-📁 File Structure
-wazuh-ai-teams-alert/
-├── ai_alert_handler.py
-├── wazuh_teams_notifier.py
-├── test_alert.json
-└── README.md
 
 🙌 Contributing
 Pull requests and ideas to improve this workflow are welcome!
