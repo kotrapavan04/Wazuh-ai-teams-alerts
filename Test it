@@ -1,0 +1,7 @@
+
+1.Create a test alert:
+echo '{ "rule": { "level": 10, "description": "Test alert" }, "agent": { "name": "TestAgent" }, "full_log": "Suspicious login attempt detected." }' > /tmp/test_alert.json
+this will create a .json file.
+
+2.Run the integration script:
+cat /tmp/test_alert.json | docker exec -i <wazuh_manager_container_id_or_name> python3 /var/ossec/integrations/wazuh_teams_notifier.py
