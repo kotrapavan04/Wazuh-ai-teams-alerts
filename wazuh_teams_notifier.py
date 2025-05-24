@@ -27,6 +27,8 @@ payload = {
     "text": message["text"]
 }
 
+#And make it executable:
+chmod +x wazuh_teams_notifier.py
 try:
     requests.post(webhook_url, json=payload)
 except Exception as e:
