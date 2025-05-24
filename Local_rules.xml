@@ -1,0 +1,8 @@
+<group name="teams-alerts">
+  <rule id="100001" level="10">
+    <decoded_as>json</decoded_as>
+    <description>Send alert to Microsoft Teams</description>
+    <options>no_full_log</options>
+    <command>teams_notify</command>
+  </rule>
+</group>
